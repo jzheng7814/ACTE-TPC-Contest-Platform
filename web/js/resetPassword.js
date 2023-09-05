@@ -11,21 +11,25 @@ function checkRequiredInputs(className)
     return valid;
 }
 
+function gotoResetPassword()
+{
+    hideNotifs();
+    hideAllSections();
+    $("#loginpage").hide();
+    $("#resetpasswordpage").show();
+}
+
 function resetPassword()
 {
     /* Request that the password be changed.
 
     Args:
     */
-    hideNotifs();
-    hideAllSections();
-    $("#resetpasswordpage").show();
-
     let url = window.location.href;
     let jwt = (url.split("?"))[1];
 
-    if(checkRequiredInputs("form-control"))
-        send( {func:"resetPassword", username:$("#mcst_username").val(), password1:$("#mcst_newPassword1").val(), password2:$("#mcst_newPassword2").val(), encodedJWT:jwt} );
+    if(checkRequiredInputs("resetpass-form-control"))
+        send( {func:"resetPassword", username:$("#mcst_resetusername").val(), password1:$("#mcst_newPassword1").val(), password2:$("#mcst_newPassword2").val(), encodedJWT:jwt} );
     else
         $("#mcst_reset_notif_4").show();
 }
@@ -38,7 +42,7 @@ function resetPasswordCallback(obj)
         result: The result of the reset password
     */
     if(obj.result == "good")
-        window.location = "https://mcsc.enrog.com";
+        window.location = "https://actecomp.org";
     else if(obj.result == "badPassword")
         $("#mcst_reset_notif_3").show();
     else if(obj.result == "badUser")

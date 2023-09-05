@@ -109,6 +109,10 @@ function onMessage(event) {
         adminGroupsCallback(obj);
     else if(obj.func == "adminCompetitorInfo")
         adminCompetitorInfoCallback(obj);
+    else if(obj.func == 'loadSpec')
+        loadSpecCallback(obj);
+    else if (obj.func == "specScoreboard")
+        specScoreboardCallback(obj);
     else
         console.log("unknown command" + obj);
 }
@@ -237,12 +241,14 @@ function send(obj) {
 $(function () {
     /* Entry point for the background scripts.
     */
-   let url = window.location.href;
-   let jwt = (url.split("?"));
-   if(jwt.length == 2)
-   {
-       resetPassword();
-   }
+    let url = window.location.href;
+    let jwt = (url.split("?"));
     openSocket();
+
+    if(jwt.length == 2)
+    {
+       gotoResetPassword();
+    }
+
     setInterval(compStatus500MSIntervalFire, 500);
 });

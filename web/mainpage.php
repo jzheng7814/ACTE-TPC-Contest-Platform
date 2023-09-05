@@ -1,6 +1,6 @@
 <div id='main_menu'>
 	<h1>
-		MCSC - Menu
+		ACTE - Menu
 	</h1>
 	<h3>
 		Select practice or competition session.

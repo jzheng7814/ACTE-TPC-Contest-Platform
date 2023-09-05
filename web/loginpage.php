@@ -11,7 +11,7 @@
 
     <div>
         <h1 class='large_login_page_name'>
-            MCSC
+            ACTE
         </h1>
         <h2 id="loginPageInstructions">
             Log In
@@ -27,18 +27,10 @@
         </div>
         <br>
         <div class="alert alert-danger red_box">
-            We are currently in maintenance mode while we prepare to become
-            open source. Expect downtime and errors.
+            We are currently in maintenance mode during the competition
+            offseason. Expect downtime and errors.
         </div>
         <br>
-        <div 
-            class="alert alert-warning red_box login_page_input_display_none"
-            id="mcst_tmpforgotpassword"    
-        >
-            For the time being, the reset password functionality isn't working. 
-            Please email contact@mcsc.enrog.com if you need your password changed.
-            You must include your username in that email.
-        </div>
         <input
             class='form-control loginpage login_page_input_1'
             type='text'

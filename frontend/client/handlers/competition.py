@@ -16,7 +16,7 @@ from io import BytesIO
 from email.mime.text import MIMEText
 
 from ..utility import (
-    isLoggedIn, inComp, isDuringCompetition, compStatus, isAdmin, isScoreboardAllowed,
+    isLoggedIn, inComp, isDuringCompetition, compStatus, isAdmin, isSpectator, isScoreboardAllowed,
     CompetitionStatus
 )
 
@@ -142,18 +142,20 @@ async def getScoreboard(params, uobj):
         AND participants.competitionid = %s""", (params["uid"], params["cid"]))
     scoreboard_division = (await tmp.fetchall())[0][0]
 
+    if temp_func not in ['getScoreboard', 'specScoreboard', 'adminScoreboard']:
+        return
 
-    if temp_func == "getScoreboard":
+    if temp_func == "getScoreboard" or temp_func == 'specScoreboard':
         if not(await isDuringCompetition(params["cid"],uobj)) or not await isScoreboardAllowed(params["cid"], uobj):
             await uobj.ws.send(json.dumps({"func":"compError", "reason":"Scoreboard is not available at this time. Please wait for the awards ceremony."}))
             return
-    elif await isAdmin(params["cid"], uobj):
+    
+    if (temp_func == 'adminScoreboard' and (await isAdmin(params["cid"], uobj))) or (temp_func == 'specScoreboard' and (await isSpectator(params['cid'], uobj))):
         if "division" in params:
             scoreboard_division = params["division"]
         else:
             scoreboard_division = -1
-    else:
-        return
+
     # GROUPID IMPLEMENT
     #tmp = await sql.execute("""SELECT CAST(SUM(subquery.maxscore) AS UNSIGNED) as total, users.name, users.school FROM 
     #                                (SELECT MAX(score) as maxscore, groupid FROM submissions WHERE competitionid=%s GROUP BY problemid, groupid) as subquery

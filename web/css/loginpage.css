@@ -37,6 +37,15 @@
     margin-right: auto;
 }
 
+#resetpasswordpage > form {
+    text-align: center;
+}
+
+#resetpasswordpage > form > * {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .red_box {
     display:block;width:500px;
 }

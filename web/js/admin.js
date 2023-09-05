@@ -78,6 +78,75 @@ function makeEditComp(obj)
     hideLoading();
 }
 
+function adminDeleteCompetition() {
+    /* Delete a competition.
+
+    Args:
+    */
+
+    if (login_uid != 1)
+    {
+        alert("Illegal action detected.");
+        return;
+    }
+
+    if (confirm("Are you sure you want to delete this competition?"))
+    {
+        let obj = { func: "deleteComp", cid:currCompId };
+        send(obj);
+    }
+    gotoMainMenu();
+}
+
+function adminMakeAdmin() {
+    /* Add an admin to the competition.
+
+    Args:
+    */
+
+    if (login_uid != 1)
+    {
+        alert("Illegal action detected.");
+        return;
+    }
+
+    let userID = prompt("Enter the user ID of a user you wish to make a competition admin:");
+    if (userID == "")
+    {
+        alert("Please enter a valid user ID.");
+    }
+    else
+    {
+        let obj = { func: "adminMakeAdmin", cid:adminCID, userid:userID };
+        send(obj);
+    }
+}
+
+function adminRemoveAdmin() {
+    /* Remove an admin to a competition.
+    
+        Args:
+        */
+    
+    if (login_uid != 1)
+    {
+        alert("Illegal action detected.");
+        return;
+    }
+    
+    let userID = prompt("Enter the user ID of a user you wish to remove from competition admin:");
+    
+    if (userID == "")
+    {
+        alert("Please enter a valid user ID.");
+    }
+    else
+    {
+        let obj = { func: "adminRemoveAdmin", cid:adminCID, userid:userID };
+        send(obj);
+    }
+}
+
 function hideAdminSections() {
     /* Hides all admin pages.
 
@@ -606,6 +675,16 @@ function adminRemoveCompetitor(remove_uid)
         send( {func:"removeCompetitor", ruid:remove_uid, cid:adminCID} );
 }
 
+function adminDeleteCompetition()
+{
+    if (confirm("Do you want to delete this competition?"))
+    {
+        let obj = {func: "deleteComp", cid: adminCID};
+        send(obj);
+    }
+    gotoMainMenu();
+}
+
 function adminCompetitorInfo(uid_info)
 {
     /* Requests information on the competitor's performance in the competition.
@@ -778,7 +857,7 @@ function adminScoreboardCallback(obj)
         obj: Everything needed to generate the scoreboard.
     */
     $("#admin_results").show();
-    $("#admin_results_list").html(generateScoreboard(obj, true));
+    $("#admin_results_list").html(generateScoreboard(obj, true, false));
 }
 
 function adminEditComp() 

@@ -43,6 +43,38 @@ async def isAdmin(cid, uobj):
         }))
         return False
 
+async def isSpectator(cid, uobj):
+    """Check if a user is an spectator of a competition.
+
+    Args:
+        cid: Competition ID to check against
+        uobj: User object to check
+
+    Returns:
+        True if the user is an admin of the competition, False if not.
+    """
+    tmp = await uobj.storage.sql.execute("""
+        SELECT 1 FROM participants
+        INNER JOIN competitions ON competitions.specid=participants.groupid
+        WHERE competitions.id=%s AND participants.competitionid=%s AND participants.userid=%s
+    """, [cid, cid, uobj.uid])
+    res = await tmp.fetchall()
+    if len(res) == 0:
+        await uobj.ws.send(json.dumps(
+            {
+                "func": "compError",
+                "reason": "Permissions Error"
+            }
+        ))
+        return False
+    elif len(res) == 1:
+        return True
+    else:
+        await uobj.ws.send(json.dumps({
+            "func": "compError",
+            "reason": "Permissions Error"
+        }))
+        return False
 
 async def isAdminOfProblem(pid, uobj):
     """Check if a user is an admin of the competition that a problem is a part of.

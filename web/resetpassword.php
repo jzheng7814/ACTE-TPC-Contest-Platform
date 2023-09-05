@@ -6,11 +6,11 @@
 	<form method="POST" onsubmit="return false;">
 		<center>
 			<span style='display:block;'>
-				<input class='form-control' style='width:400px;padding:10px;height:auto;margin:5px;' type='text'
-					name='mcst_username' id='mcst_username' placeholder='Username'>
-				<input class='form-control' style='width:400px;padding:10px;height:auto;margin:5px;'
+				<input class='resetpass-form-control' style='width:400px;padding:10px;height:auto;margin:5px;' type='text'
+					name='mcst_username' id='mcst_resetusername' placeholder='Username'>
+				<input class='resetpass-form-control' style='width:400px;padding:10px;height:auto;margin:5px;'
 					type='password' name='mcst_newPassword1' id='mcst_newPassword1' placeholder='Enter New Password'>
-				<input class='form-control' style='width:400px;padding:10px;height:auto;margin:5px;'
+				<input class='resetpass-form-control' style='width:400px;padding:10px;height:auto;margin:5px;'
 					type='password' name='mcst_newPassword2' id='mcst_newPassword2' placeholder='Re-enter New Password'>
 				<input class='btn btn-primary' style='width:400px;padding:10px;margin:5px;'
 					onclick="resetPassword();return false;" type='submit' id='mcst_resetPassword'

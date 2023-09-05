@@ -20,15 +20,17 @@ function mainMenuPracticeMessageCallback(obj) {
     curPage = "mainMenuPractice";
     var cons = "";
     for (var i =0;i<obj.total;i++) {
-        cons += '<div '+(obj.list[i][6]?'':'onclick="mmloadCompetition('+obj.list[i][0]+');"')+' id='+obj.list[i][0]+' style="cursor:pointer;margin:5px;padding:10px;border-radius:5px;background-color:#EEEEEE;border:solid 1px 777777;">\
-                    <table><tr><td style="width:100%;'+(obj.list[i][6]?'opacity:0.5;':'')+'"><span style="font-weight:bold;">'+obj.list[i][1]+'</span> - '+obj.list[i][2]+' - Problems: '+obj.list[i][3]+'</td>\
-                    <td>'+(obj.list[i][5]?'<div class="mmAdminButton" style="cursor:pointer;border:solid 1px #777777;border-radius:4px;padding:4px;" id="acb'+obj.list[i][0]+'">Admin</div>':'')+'</td>\
-                    <td>'+(obj.list[i][6]?'<div class="mmJoinButton" style="cursor:pointer;border:solid 1px #777777;border-radius:4px;padding:4px;" id="acb'+obj.list[i][0]+'">Join</div>':'')+'</td></tr></table>\
+        cons += '<div '+(obj.list[i][8]?'':'onclick="mmloadCompetition('+obj.list[i][0]+');"')+' id='+obj.list[i][0]+' style="cursor:pointer;margin:5px;padding:10px;border-radius:5px;background-color:#EEEEEE;border:solid 1px 777777;">\
+                    <table><tr><td style="width:100%;'+(obj.list[i][8]?'opacity:0.5;':'')+'"><span style="font-weight:bold;">'+obj.list[i][1]+'</span> - '+obj.list[i][2]+' - Problems: '+obj.list[i][3]+'</td>\
+                    <td>'+(obj.list[i][6]?'<div class="mmAdminButton" style="cursor:pointer;border:solid 1px #777777;border-radius:4px;padding:4px;" id="acb'+obj.list[i][0]+'">Admin</div>':'')+'</td>\
+                    <td>'+(obj.list[i][7]?'<div class="mmSpecButton" style="cursor:pointer;border:solid 1px #777777;border-radius:4px;padding:4px;" id="acb'+obj.list[i][0]+'">Spec</div>':'')+'</td>\
+                    <td>'+(obj.list[i][8]?'<div class="mmJoinButton" style="cursor:pointer;border:solid 1px #777777;border-radius:4px;padding:4px;" id="acb'+obj.list[i][0]+'">Join</div>':'')+'</td></tr></table>\
         </div>';
     }
     $("#main_menu_practice_list").html(cons);
     $("#createCompPage").hide();
     $(".mmAdminButton").click(adminClickHandler);
+    $(".mmSpecButton").click(specClickHandler);
     $(".mmJoinButton").click(joinClickHandler);
 }
 
@@ -54,11 +56,13 @@ function mainMenuCompeteMessageCallback(obj) {
                     <table><tr><td style="width:100%;"><span id="compName'+obj.list[i][0]+'" style="font-weight:bold;">'+obj.list[i][1]+'</span> - \
                     <span id="compDesc'+obj.list[i][0]+'">'+ obj.list[i][2]+'</span> - \
                     Problems: '+obj.list[i][3]+'</td>\
-                    <td>'+(obj.list[i][5]?'<div class="mmAdminButton" style="cursor:pointer;border:solid 1px #777777;border-radius:4px;padding:4px;" id="acb'+obj.list[i][0]+'">Admin</div>':'')+'</td></tr></table>\
+                    <td>'+(obj.list[i][6]?'<div class="mmAdminButton" style="cursor:pointer;border:solid 1px #777777;border-radius:4px;padding:4px;" id="acb'+obj.list[i][0]+'">Admin</div>':'')+'</td>\
+                    <td>'+(obj.list[i][7]?'<div class="mmSpecButton" style="cursor:pointer;border:solid 1px #777777;border-radius:4px;padding:4px;" id="acb'+obj.list[i][0]+'">Spec</div>':'')+'</td></tr></table>\
         </div>';
     }
     $("#main_menu_compete_list").html(cons);
     $("#createCompPage").hide();
+    $(".mmSpecButton").click(specClickHandler);
     $(".mmAdminButton").click(adminClickHandler);
     $(".mmJoinButton").click(joinClickHandler);
 }
@@ -71,6 +75,13 @@ function adminClickHandler(e) {
     */
     var cid = parseInt(this.id.substring(3));
     loadAdmin(cid);
+    e.stopPropagation();
+}
+
+function specClickHandler(e)
+{
+    var cid = parseInt(this.id.substring(3));
+    loadSpec(cid);
     e.stopPropagation();
 }
 

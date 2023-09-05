@@ -3,6 +3,7 @@ from .handlers.competition import *
 from .handlers.general import *
 from .handlers.login import *
 from .handlers.main_menu import *
+from .handlers.spectator import *
 
 
 async def handle_function(func, params, uobj):
@@ -61,6 +62,10 @@ async def handle_function(func, params, uobj):
         await adminSubmissions(params, uobj)
     elif func == "adminScoreboard":
         await getScoreboard(params, uobj)
+    elif func == "adminMakeAdmin":
+        await adminMakeAdmin(params, uobj)
+    elif func == "adminRemoveAdmin":
+        await adminRemoveAdmin(params, uobj)
     elif func == "forgotPassword":
         await forgotPassword(params, uobj)
     elif func == "resetPassword":
@@ -87,6 +92,8 @@ async def handle_function(func, params, uobj):
         await adminLevels(params, uobj)
     elif func == "adminDeleteLevel":
         await adminDeleteLevel(params, uobj)
+    elif func == "deleteComp":
+        await deleteComp(params, uobj)
     elif func == "adminSaveLevel":
         await adminSaveLevel(params, uobj)
     elif func == "adminAddLevel":
@@ -121,5 +128,9 @@ async def handle_function(func, params, uobj):
         await adminAddGroup(params, uobj)
     elif func == "joinComp":
         await joinComp(params, uobj)
+    elif func == "loadSpec":
+        await loadSpec(params, uobj)
+    elif func == "specScoreboard":
+        await getScoreboard(params, uobj)
     else:
         print("Unknown message from client:", params)

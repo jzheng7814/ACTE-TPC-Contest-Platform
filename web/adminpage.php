@@ -43,10 +43,19 @@
                 <button class="sidebarbutton" onclick="adminScoreboard();">
                     Scoreboard
                 </button>
+                <button class="sidebarbutton" onclick="adminDeleteCompetition();">
+                    Delete Competition
+                </button>
+                <button class="sidebarbutton" onclick="adminMakeAdmin();">
+                    Make Admin
+                </button>
+                <button class="sidebarbutton" onclick="adminRemoveAdmin();">
+                    Remove Admin
+                </button>
                 <div class="sidebardivider"></div>
                 <div class="sidebartextsmall">
                     <br>
-                    MCSC 2018-2019
+                    ACTE 2021-2022
                 </div>
             </div>
         </div>
@@ -54,7 +63,7 @@
 
     <div id='admin_field'>
         <div id="admin_backlay">
-            MCSC
+            ACTE
         </div>
         <div id='admin_levels'>
             <div>
@@ -311,7 +320,7 @@
     </div>
     <div id='adminFieldSub'>
         <div>
-            MCSC
+            ACTE
         </div>
     </div>
 </div>

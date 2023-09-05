@@ -173,7 +173,7 @@ function sbScoreboard() {
     send(obj);
 }
 
-function generateScoreboard(obj, showAdmin=false) {
+function generateScoreboard(obj, showAdmin=false, spec=false) {
 
     //All the competition's groups, indexed by group id
     let groups = {};
@@ -222,7 +222,15 @@ function generateScoreboard(obj, showAdmin=false) {
         for (let i=0;i<obj.divisions.length;i++) {
             accul+="<option value='"+obj.divisions[i][0]+"'>"+obj.divisions[i][1]+"</option>";
         }
-        accul+= "</select> <button style='color:black;' onclick='adminScoreboardDivision();'>Load</button><br>";
+        
+        if (spec)
+        {
+            accul+= "</select> <button style='color:black;' onclick='specScoreboardDivision();'>Load</button><br>";
+        }
+        else
+        {
+            accul+= "</select> <button style='color:black;' onclick='adminScoreboardDivision();'>Load</button><br>";
+        }
     }
     accul += "Problem numbers are on the right. Problem status boxes have the current score at the top and the total number of submissions at the bottom.<br><br>"
         +"<table class='problemSubmissionsTable'><tr><th style='width:100px;'>Place</th><th style='width:200px;'>Group<div style='font-size:12px;'>Members</div></th><th style='width:100px;'>Total</th>";

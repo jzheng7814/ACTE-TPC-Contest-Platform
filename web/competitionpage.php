@@ -67,7 +67,7 @@
                     All Submissions
                 </button>
                 <div class="sidebardivider"></div>
-                <div class="sidebartextsmall"><br>MCSC 2018-2019</div>
+                <div class="sidebartextsmall"><br>ACTE 2021-2022</div>
             </div>
             <div class="sidebardivider"></div>
         </div>
@@ -168,7 +168,7 @@
             <br><br><br>
         </div>
         <div id="backlay">
-            MCSC
+            ACTE
         </div>
     </div>
 
@@ -179,7 +179,7 @@
     </div>
     <div id='fieldSub'>
         <div>
-            MCSC
+            ACTE
         </div>
     </div>
 </div>

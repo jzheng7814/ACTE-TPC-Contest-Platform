@@ -24,8 +24,8 @@ if __name__ == "__main__":
     # Set up SSL
     ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
     ssl_context.load_cert_chain(
-        "/etc/letsencrypt/live/mcsc.mcscomp.org/cert.pem",
-        keyfile="/etc/letsencrypt/live/mcsc.mcscomp.org/privkey.pem"
+        "/etc/letsencrypt/live/actecomp.org/cert.pem",
+        keyfile="/etc/letsencrypt/live/actecomp.org/privkey.pem"
     )
 
     # Set up servers & tasks

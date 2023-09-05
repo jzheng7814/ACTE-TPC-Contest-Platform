@@ -9,6 +9,7 @@
 	<link rel="stylesheet" href="css/main_page.css">
 	<link rel="stylesheet" href="css/loginpage.css">
 	<link rel="stylesheet" href="css/header.css">
+	<link rel="stylesheet" href="css/spectator_page.css">
 	<script src="js/utility.js"></script>
 	<script src="js/client.js"></script>
 	<script src="js/login.js"></script>
@@ -20,6 +21,7 @@
 	<script src="js/admin.js"></script>
 	<script src="js/compstatus.js"></script>
 	<script src="js/resetPassword.js"></script>
+	<script src="js/spectator.js"></script>
 	
 	<style>
 		<?php for ($i=0; $i<16; $i++) {

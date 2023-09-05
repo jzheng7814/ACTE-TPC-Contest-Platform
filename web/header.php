@@ -1,5 +1,6 @@
 <div id='web_header'>
-    <span>MCSC</span>
+    <img src="images/acte.jpg" style="position:absolute;" width=40px height=40px />
+    <span>ACTE</span>
     <div class='header_info'>
         <span id='top_name'></span>
         <span id='top_competition_name'></span>

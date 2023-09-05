@@ -5,7 +5,6 @@ import json
 import time
 import re
 import bcrypt
-import smtplib
 import ssl
 import jwt
 import random
@@ -17,18 +16,27 @@ from email.mime.text import MIMEText
 from ..utility import isLoggedIn
 from .admin import loadAdmin
 from ..utility import hashPassword
+from googleapiclient.discovery import build
+from google.oauth2.credentials import Credentials
+
+async def isASiteAdmin(uobj):
+    tmp = await uobj.storage.sql.execute("SELECT 1 FROM admins WHERE userid=%s", [uobj.uid])
+    tmp = await tmp.fetchall()
+    return len(tmp) != 0
 
 async def getMainMenuList(params, uobj):
     if not(await isLoggedIn(params["uid"], uobj)):
         return
     sql = uobj.storage.sql
-    isSiteAdmin = (uobj.uid == 1)
+
+    isSiteAdmin = await isASiteAdmin(uobj)
+
     tmp = None
     if params["type"] == "prac":
-        tmp = await sql.execute("""SELECT id, competitionname, short_desc, (SELECT COUNT(id) FROM problems WHERE problems.competitionid=competitions.id) AS total_problems, adminid
+        tmp = await sql.execute("""SELECT id, competitionname, short_desc, (SELECT COUNT(id) FROM problems WHERE problems.competitionid=competitions.id) AS total_problems, adminid, specid
                                         FROm competitions WHERE type=%s""", ["prac"])
     else:
-        tmp = await sql.execute("""SELECT competitions.id, competitions.competitionname, competitions.short_desc, (SELECT COUNT(id) FROM problems WHERE problems.competitionid=competitions.id) AS total_problems, competitions.adminid 
+        tmp = await sql.execute("""SELECT competitions.id, competitions.competitionname, competitions.short_desc, (SELECT COUNT(id) FROM problems WHERE problems.competitionid=competitions.id) AS total_problems, competitions.adminid , competitions.specid
                                         FROM competitions INNER JOIN participants ON competitions.id=participants.competitionid
                                         WHERE type=%s AND userid=%s""", [params["type"], uobj.uid])
     _results = await tmp.fetchall()
@@ -38,6 +46,11 @@ async def getMainMenuList(params, uobj):
             results.append(list(_results[i])+[True])
         else:
             results.append(list(_results[i])+[False])
+
+        if _results[i][5] in uobj.groups.values():
+            results[-1] = list(results[-1])+[True]
+        else:
+            results[-1] = list(results[-1])+[False]
     func = None
     if params["type"] == "prac":
         func = "getMainMenuPracticeList"
@@ -52,6 +65,7 @@ async def getMainMenuList(params, uobj):
                 results[i].append(True)
     else:
         func = "getMainMenuCompeteList"
+    print(results)
     await uobj.ws.send(json.dumps({"func":func, "total":len(results), "list":results, "isSiteAdmin":isSiteAdmin}))
 
 async def getMainMenuSPS(params, uobj):
@@ -69,7 +83,7 @@ async def createComp(params, uobj):
 
     sql = uobj.storage.sql
 
-    if params["type"] == "prac" and uobj.uid != 1:
+    if params["type"] == "prac" and not (await isASiteAdmin(uobj)):
         await uobj.ws.send(json.dumps( {"func":"compError", "reason":"only admin can create new practice competitions"}))
         return
 
@@ -111,9 +125,9 @@ async def forgotPassword(params, uobj):
         encodedJWT = jwt.encode( {"id":results[0][3], "time":time.time()+3600000}, results[0][2], algorithm="HS256" ).decode('utf-8')
         await sql.execute("INSERT INTO tokens (token, timeout, username) VALUES (%s, %s, %s)",
                                 [encodedJWT, (time.time() + 3600000), params["username"]])
-        link = "https://mcsc.enrog.com/index.php?" + encodedJWT
+        link = "https://actecomp.org/index.php?" + encodedJWT
         message = """<div style='width: 550px; height: 350px; text-align: center; background-color:rgb(245,245,245);'>
-                         <div style='height: 50px; font-size: 30px; text-align: left; color:rgb(0,109,117); margin-left: 20px; font-weight: bold;'>MCSC</div>
+                         <div style='height: 50px; font-size: 30px; text-align: left; color:rgb(0,109,117); margin-left: 20px; font-weight: bold;'>ACTE</div>
                          <div style='width: 450px; height: 260px; text-align: center; background-color: white; margin-left: auto; margin-right: auto;'>
                              <div style='width: 350px; text-align: left; margin-left: auto; margin-right: auto; padding-top: 20px;padding-bottom:10px;'>
                              <div style='font-size: 20px; font-weight: bold;color:black;'>Reset Your Password</div>
@@ -124,18 +138,18 @@ async def forgotPassword(params, uobj):
                                  Reset Your Password
                              </a>
                          </div>
-                         <a style='font-size: 10px; padding-top: 30px;' href='https://mcsc.enrog.com'>Main Site</a></div>
+                         <a style='font-size: 10px; padding-top: 30px;' href='https://actecomp.org'>Main Site</a></div>
                      </div>"""
         msg = MIMEText(message, "html")
         msg['Subject'] = "Reset Password"
-        msg['From'] = "contact@enrog.com"
+        msg['From'] = "actepassreset@gmail.com"
         msg['To'] = results[0][0]
-        s = smtplib.SMTP('localhost')
-        s.starttls()
-        s.ehlo()
-        s.sendmail("contact@enrog.com", results[0][0], msg.as_string())
-        s.quit()
+        rawtxt = {'raw': base64.urlsafe_b64encode(msg.as_bytes()).decode()}
 
+        creds = Credentials.from_authorized_user_file('~/OpenCPC/frontend/client/handlers/token.json', ['https://mail.google.com/'])
+        service = build('gmail', 'v1', credentials=creds)
+
+        service.users().messages().send(userId='me', body=rawtxt).execute()
         await uobj.ws.send(json.dumps( {"func":"forgotPassword", "result":"good"}))
 
 #https://pyjwt.readthedocs.io/en/latest/

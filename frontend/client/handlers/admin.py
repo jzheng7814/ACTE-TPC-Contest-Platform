@@ -19,6 +19,13 @@ from ..utility import isLoggedIn, isAdmin, isAdminOfProblem, compStatus
 from .general import sendCompStatus
 from .competition import sendUsersInComp
 
+async def isHeadAdmin(uobj):
+    if uobj.uid != 1:
+        await uobj.ws.send(json.dumps( {"func":"compError", "reason":"Illegal action detected. Head administrator contacted."} ))
+        return False
+    else:
+        return True
+
 async def adminProblems(params, uobj):
     if not(await isLoggedIn(params["uid"], uobj)) or not(await isAdmin(params["cid"], uobj)):
         return
@@ -106,6 +113,61 @@ async def editComp(params, uobj):
         
     await sql.execute("UPDATE competitions SET competitionname=%s, short_desc=%s WHERE id=%s",
                             (params["name"], params["short_desc"], params["cid"]))
+
+async def deleteComp(params, uobj):
+    if not(await isLoggedIn(params["uid"], uobj)) or not(await isAdmin(params["cid"], uobj)):
+        return
+
+    if not (await isHeadAdmin(uobj)):
+        return
+
+    sql = uobj.storage.sql
+    await sql.execute(f"DELETE FROM cases WHERE competitionid={params['cid']};")
+    await sql.execute(f"DELETE FROM competitions WHERE id={params['cid']};")
+    await sql.execute(f"DELETE FROM divisions WHERE competitionid={params['cid']};")
+    await sql.execute(f"DELETE FROM groups WHERE competitionid={params['cid']};")
+    await sql.execute(f"DELETE FROM images WHERE competitionid={params['cid']};")
+    await sql.execute(f"DELETE FROM levels WHERE competitionid={params['cid']};")
+    await sql.execute(f"DELETE FROM participants WHERE competitionid={params['cid']};")
+    await sql.execute(f"DELETE FROM problems WHERE competitionid={params['cid']};")
+    await sql.execute(f"DELETE FROM submissions WHERE competitionid={params['cid']};")
+
+async def adminMakeAdmin(params, uobj):
+    if not(await isLoggedIn(params["uid"], uobj)) or not(await isAdmin(params["cid"], uobj)):
+        return
+
+    if not (await isHeadAdmin(uobj)):
+        return
+
+    sql = uobj.storage.sql
+    tmp = await sql.execute("SELECT 1 FROM participants WHERE competitionid=%s AND userid=%s", [params["cid"], params["userid"]])
+    tmp = await tmp.fetchall()
+
+    adminGroupID = await sql.execute("SELECT adminid FROM competitions WHERE id=%s", [params["cid"]])
+    adminGroupID = await adminGroupID.fetchall()
+    adminGroupID = adminGroupID[0][0]
+
+    if len(tmp) == 0:
+        await sql.execute("INSERT INTO participants (competitionid, userid, spec, groupid) VALUES (%s, %s, %s, %s)", [params["cid"], params["userid"], "1", adminGroupID])
+    else:
+        print(f"Updating entry (cid={params['cid']}, uid={params['userid']}, adminid={adminGroupID}")
+        await sql.execute("UPDATE participants SET groupid=%s WHERE competitionid=%s AND userid=%s", [adminGroupID, params["cid"], params["userid"]])
+
+async def adminRemoveAdmin(params, uobj):
+    if not(await isLoggedIn(params["uid"], uobj)) or not(await isAdmin(params["cid"], uobj)):
+        return
+
+    if not (await isHeadAdmin(uobj)):
+        return
+
+    sql = uobj.storage.sql
+    tmp = await sql.execute("SELECT 1 FROM participants WHERE competitionid=%s AND userid=%s", [params["cid"], params["userid"]])
+    tmp = await tmp.fetchall()
+
+    if len(tmp) == 0:
+        return
+    else:
+        await sql.execute("DELETE FROM participants WHERE competitionid=%s AND userid=%s", [params["cid"], params["userid"]])
 
 #params -- cid, username
 async def addCompetitor(params, uobj):
