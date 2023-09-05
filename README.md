@@ -17,7 +17,7 @@ The URL to the platform is https://actecomp.org. Note that the HTTPS is required
 The full-stack contest platform itself consists of 3 parts:
 Clean client-side frontend coded from HTML, CSS, JavaScript, and PHP. <br />
 Backend hub server coded in Python managing a MySQL server which also distributes code submissions from the user client sides to submission processing servers. <br />
-Submission processing servers coded in Python which take the code submissions, run them through a set of inputs, and score them on a set of correct outputs for those inputs. <br /<
+Submission processing servers coded in Python which take the code submissions, run them through a set of inputs, and score them on a set of correct outputs for those inputs.
 
 The platform features a live-updating scoreboard, refreshing upon scoreboard load or new code submission. Testcase results are returned live as they are graded to the user. The platform also features scalability in the form of the ability to support any number of submission processing servers, meaning that even with increasing numbers of students, scalability can be maintained simply by increasing the hardware quality of the hub server as well as the quantity of submission processing servers. The turnaround time on submissions during contest time is rarely above 1 second, barring slow code that exceeds time limit on testcases.
 
