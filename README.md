@@ -4,8 +4,8 @@ NOTE: The code in this repository is an updated copy of what can be found at the
 
 The ACTE Team Programming Challenge is a contest that has existed for the majority of the ACTE organization's lifetime, but has been brought to the virtual hosting space under this contest platform since Spring 2021. The contest is formatted as such:
 
-10 GREEN problems (Easiest Difficulty, Skill Set: Basic Language Knowledge, Language Library Knowledge, Array Manipulation)- 10 points each
-6 BLUE problems (Medium Difficulty, Skill Set: Binary Search, Sorting, Ad-Hoc, Intermediate Contest Programming Knowledge)- 40 points each
+10 GREEN problems (Easiest Difficulty, Skill Set: Basic Language Knowledge, Language Library Knowledge, Array Manipulation)- 10 points each\n
+6 BLUE problems (Medium Difficulty, Skill Set: Binary Search, Sorting, Ad-Hoc, Intermediate Contest Programming Knowledge)- 40 points each\n
 4 RED problems (Hardest Difficulty, Skill Set: Dijkstra's Algorithm, Kruskal/Prim, Dynamic Programming, Advanced Contest Programming Knowledge) - 80 points each
 
 Students work in groups of size 1-3 and are given 3 hours to solve all problems.
